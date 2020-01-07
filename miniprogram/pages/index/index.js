@@ -88,11 +88,11 @@ Page({
     // 选择图片
     wx.chooseImage({
       count: 1,
-      sizeType: ['original'],
+      sizeType: ['compressed'],
       sourceType: ['album'],
       success: function(res) {
         wx.showLoading({
-          title: '上传中',
+          title: '分析中',
         })
 
         const filePath = res.tempFilePaths[0]
@@ -102,16 +102,37 @@ Page({
           encoding: 'base64',
           success: function(res) {
             const image = res.data;
+            console.log(image);
             wx.cloud.callFunction({
               name: 'ocr',
               data: {
                 image
               }
             }).then(res => {
-              console.log(res.result);
+              wx.hideLoading();
+              wx.showToast({
+                title: '分析成功',
+              })
+              const {
+                OCRdata,
+                lackFunds
+              } = res.result;
+              console.log(lackFunds);
+              app.globalData.OCRdata = OCRdata;
+              app.globalData.lackFunds = lackFunds;
+              wx.navigateTo({
+                url: '../fundsList/fundsList',
+              })
+            }).catch(err => {
+              wx.hideLoading();
+              wx.showToast({
+                title: '分析失败',
+                icon: 'none'
+              })
+              console.log('云端错误:', err);
             })
           },
-          fail: function(res){
+          fail: function(res) {
             console.error('failed')
           }
         })
@@ -127,7 +148,5 @@ Page({
       msg: "Hello World"
     });
     console.log(event);
-
   }
-
 })
