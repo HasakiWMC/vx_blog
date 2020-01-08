@@ -11,7 +11,8 @@ HttpClient.setRequestOptions({
 // 云函数入口函数
 exports.main = async(event, context) => {
   const {
-    image
+    cloudPath,
+    fileID
   } = event;
 
   const {
@@ -30,6 +31,12 @@ exports.main = async(event, context) => {
   })).result;
 
   const client = new AipOcrClient(APP_ID, API_KEY, SECRET_KEY);
+
+  // console.log(fileID)
+  const buffer = (await cloud.downloadFile({
+    fileID
+  })).fileContent;
+  const image = buffer.toString("base64");
 
   const result = await new Promise((res, _) => {
     client.accurateBasic(image).then(function(result) {

@@ -8,7 +8,9 @@ Page({
    */
   data: {
     OCRdata: {},
-    lackFunds: []
+    lackFunds: [],
+    filePath: '',
+    isShowImg: false
   },
 
   /**
@@ -17,13 +19,21 @@ Page({
   onLoad: function(options) {
     const {
       OCRdata,
-      lackFunds
+      lackFunds,
+      filePath
     } = app.globalData;
     this.setData({
       OCRdata,
-      lackFunds
+      lackFunds,
+      filePath
     });
     console.log(OCRdata);
+  },
+
+  exchange: function(){
+    this.setData({
+      isShowImg: !this.data.isShowImg
+    });
   },
 
   /**

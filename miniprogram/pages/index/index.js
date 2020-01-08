@@ -84,35 +84,44 @@ Page({
   },
 
   // 上传图片
-  doUpload: function() {
+  doUpload: async function() {
     // 选择图片
+    if (!app.globalData.fileCnt) {
+      app.globalData.fileCnt = 1;
+    }
     wx.chooseImage({
       count: 1,
       sizeType: ['compressed'],
       sourceType: ['album'],
       success: function(res) {
-        wx.showLoading({
-          title: '分析中',
-        })
-
         const filePath = res.tempFilePaths[0]
         console.log(filePath);
-        wx.getFileSystemManager().readFile({
+        app.globalData.filePath = filePath;
+        wx.showLoading({
+          title: '上传中',
+        })
+        const cloudPath = `tmp-image${app.globalData.fileCnt}` + filePath.match(/\.[^.]+?$/)[0];
+        wx.cloud.uploadFile({
+          cloudPath,
           filePath,
-          encoding: 'base64',
-          success: function(res) {
-            const image = res.data;
-            console.log(image);
+          success: res => {
+            // get resource ID
+            wx.hideLoading();
+            wx.showLoading({
+              title: '分析中',
+            });
             wx.cloud.callFunction({
+              // name: 'ocrMock', // 节省网络资源使用mock数据api
               name: 'ocr',
               data: {
-                image
+                cloudPath,
+                fileID: res.fileID
               }
             }).then(res => {
               wx.hideLoading();
               wx.showToast({
                 title: '分析成功',
-              })
+              });
               const {
                 OCRdata,
                 lackFunds
@@ -128,14 +137,20 @@ Page({
               wx.showToast({
                 title: '分析失败',
                 icon: 'none'
-              })
+              });
               console.log('云端错误:', err);
-            })
+            }).finally(() => {
+              wx.cloud.deleteFile({
+                fileList: [res.fileID]
+              });
+              app.globalData.fileCnt += 1;
+            });
           },
-          fail: function(res) {
-            console.error('failed')
+          fail: err => {
+            wx.hideLoading();
+            console.log('上传文件失败:', err);
           }
-        })
+        });
       },
       fail: e => {
         console.error(e)

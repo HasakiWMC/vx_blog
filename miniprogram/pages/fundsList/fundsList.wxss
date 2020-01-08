@@ -1,3 +1,10 @@
+.fund-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+}
+
 .table {
   border: 0rpx solid darkgray;
   font-size: 21rpx;
@@ -34,3 +41,6 @@
   background: #e6f3f9;
 }
 
+.button {
+  margin-bottom: 20rpx;
+}

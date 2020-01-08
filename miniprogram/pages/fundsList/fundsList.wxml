@@ -1,22 +1,28 @@
-<view class="table">
-  <view class="tr bg-w">
-    <view class="th" style="width: 15%">基金名</view>
-    <view class="th" style="width: 13%">盈利收益率</view>
-    <view class="th" style="width: 10%">市盈率</view>
-    <view class="th" style="width: 10%">市净率</view>
-    <view class="th" style="width: 11%">股息率</view>
-    <view class="th" style="width: 11%">ROE</view>
-    <view class="th" style="width: 15%">场内基金</view>
-    <view class="th" style="width: 15%">场外基金</view>
+<view class="fund-page">
+  <view class="table" wx:if="{{!isShowImg}}">
+    <view class="tr bg-w">
+      <view class="th" style="width: 15%">{{OCRdata.date}}</view>
+      <view class="th" style="width: 13%">盈利收益率</view>
+      <view class="th" style="width: 10%">市盈率</view>
+      <view class="th" style="width: 10%">市净率</view>
+      <view class="th" style="width: 11%">股息率</view>
+      <view class="th" style="width: 11%">ROE</view>
+      <view class="th" style="width: 15%">场内基金</view>
+      <view class="th" style="width: 15%">场外基金</view>
+    </view>
+    <view class="tr {{index % 2 === 0 ? 'bg-g' : ''}}" wx:key="index" wx:for="{{OCRdata.funds}}">
+      <view class="td" style="width: 15%">{{item.name}}</view>
+      <view class="td" style="width: 13%">{{item.EP}}</view>
+      <view class="td" style="width: 10%">{{item.PE}}</view>
+      <view class="td" style="width: 10%">{{item.PB}}</view>
+      <view class="td" style="width: 11%">{{item.dividendYieldRatio}}</view>
+      <view class="td" style="width: 11%">{{item.ROE}}</view>
+      <view class="td" style="width: 15%">{{item.OnSiteFund}}</view>
+      <view class="td" style="width: 15%">{{item.OTCFund}}</view>
+    </view>
   </view>
-  <view class="tr {{index % 2 === 0 ? 'bg-g' : ''}}" wx:key="{{code}}" wx:for="{{OCRdata.funds}}">
-    <view class="td" style="width: 15%">{{item.name}}</view>
-    <view class="td" style="width: 13%">{{item.EP}}</view>
-    <view class="td" style="width: 10%">{{item.PE}}</view>
-    <view class="td" style="width: 10%">{{item.PB}}</view>
-    <view class="td" style="width: 11%">{{item.dividendYieldRatio}}</view>
-    <view class="td" style="width: 11%">{{item.ROE}}</view>
-    <view class="td" style="width: 15%">{{item.OnSiteFund}}</view>
-    <view class="td" style="width: 15%">{{item.OTCFund}}</view>
-  </view>
+
+  <image src="{{filePath}}" style="width:750rpx; height: 90vh" mode="aspectFit" wx:if="{{isShowImg}}"></image>
+
+  <button class="button" type="primary" bind:tap="exchange">切换</button>
 </view>
