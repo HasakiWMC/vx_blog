@@ -86,9 +86,6 @@ Page({
   // 上传图片
   doUpload: async function() {
     // 选择图片
-    if (!app.globalData.fileCnt) {
-      app.globalData.fileCnt = 1;
-    }
     wx.chooseImage({
       count: 1,
       sizeType: ['compressed'],
@@ -100,7 +97,7 @@ Page({
         wx.showLoading({
           title: '上传中',
         })
-        const cloudPath = `tmp-image${app.globalData.fileCnt}` + filePath.match(/\.[^.]+?$/)[0];
+        const cloudPath = `tmp-image_${Math.floor(Math.random() * Math.pow(10, 5))}` + filePath.match(/\.[^.]+?$/)[0];
         wx.cloud.uploadFile({
           cloudPath,
           filePath,
@@ -111,7 +108,7 @@ Page({
               title: '分析中',
             });
             wx.cloud.callFunction({
-              // name: 'ocrMock', // 节省网络资源使用mock数据api
+              // name: 'ocrMock' , // 节省网络资源使用mock数据api
               name: 'ocr',
               data: {
                 cloudPath,
@@ -143,7 +140,6 @@ Page({
               wx.cloud.deleteFile({
                 fileList: [res.fileID]
               });
-              app.globalData.fileCnt += 1;
             });
           },
           fail: err => {

@@ -13,7 +13,8 @@
     "pages/openapi/cloudid/cloudid",
     "pages/im/im",
     "pages/im/room/room",
-    "pages/fundsList/fundsList"
+    "pages/fundsList/fundsList",
+    "pages/echartsDemo/echartsDemo"
   ],
   "window": {
     "backgroundColor": "#ffffff",
