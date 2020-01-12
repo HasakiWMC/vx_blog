@@ -109,7 +109,7 @@ Page({
             });
             wx.cloud.callFunction({
               // name: 'ocrMock' , // 节省网络资源使用mock数据api
-              name: 'ocr',
+              name: 'computedFundList',
               data: {
                 cloudPath,
                 fileID: res.fileID

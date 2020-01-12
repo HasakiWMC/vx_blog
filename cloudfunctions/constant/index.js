@@ -6,6 +6,8 @@ cloud.init()
 // 云函数入口函数
 exports.main = async(event, context) => {
 
+  const fundParam = ['name', 'EP', 'PE', 'PB', 'dividendYieldRatio', 'ROE', 'OnSiteFund', 'OTCFund'];
+
   const funds = [{
     name: '300价值',
     EP: true,
@@ -312,6 +314,7 @@ exports.main = async(event, context) => {
 
   return {
     funds,
-    param
+    param,
+    fundParam
   }
 }
